@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poetiq RSI 复现报告 · metaharness</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --line:#2d333b;
+    --txt:#e6edf3; --dim:#9da7b3; --faint:#6e7a87;
+    --green:#3fb950; --amber:#d29922; --red:#f85149; --blue:#58a6ff; --purple:#bc8cff;
+    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font:15px/1.65 -apple-system,"PingFang SC","Hiragino Sans GB","Segoe UI",sans-serif;padding:0 0 80px}
+  .wrap{max-width:980px;margin:0 auto;padding:0 28px}
+  header{border-bottom:1px solid var(--line);padding:48px 0 32px;margin-bottom:36px;
+    background:linear-gradient(180deg,#11151c 0%,var(--bg) 100%)}
+  h1{font-size:30px;font-weight:700;letter-spacing:-.5px}
+  h1 .en{display:block;font-size:15px;color:var(--dim);font-weight:400;margin-top:6px;font-family:var(--mono)}
+  .meta{color:var(--faint);font-size:13px;margin-top:14px;font-family:var(--mono)}
+  .chips{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:12.5px;font-family:var(--mono);padding:4px 12px;border-radius:999px;border:1px solid var(--line)}
+  .chip.ok{color:var(--green);border-color:#2ea04366;background:#2ea04314}
+  .chip.run{color:var(--amber);border-color:#d2992266;background:#d2992214}
+  .chip.info{color:var(--blue);border-color:#58a6ff55;background:#58a6ff12}
+  h2{font-size:20px;margin:44px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h2 .n{color:var(--purple);font-family:var(--mono);font-size:16px;margin-right:8px}
+  h3{font-size:15.5px;margin:22px 0 10px;color:var(--blue)}
+  p{margin:10px 0;color:var(--txt)}
+  .dim{color:var(--dim)}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:14px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+  th{color:var(--dim);font-weight:600;text-align:left;padding:8px 10px;border-bottom:2px solid var(--line);font-size:13px}
+  td{padding:8px 10px;border-bottom:1px solid var(--line)}
+  tr:last-child td{border-bottom:none}
+  .num{font-family:var(--mono)}
+  .big{font-size:26px;font-weight:700;font-family:var(--mono)}
+  .pass{color:var(--green)} .fail{color:var(--red)} .warn{color:var(--amber)}
+  code,.code{font-family:var(--mono);font-size:13px;background:var(--panel2);padding:2px 6px;border-radius:5px;color:#a5d6ff}
+  pre{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow-x:auto;
+    font-family:var(--mono);font-size:12.5px;line-height:1.6;color:#c9d1d9;margin:12px 0}
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;margin:14px 0}
+  .fbox{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 14px}
+  .farr{color:var(--faint)}
+  .quote{border-left:3px solid var(--green);padding:10px 16px;background:#2ea0430d;border-radius:0 8px 8px 0;margin:14px 0;font-style:italic;color:var(--dim)}
+  .quote b{color:var(--green);font-style:normal}
+  .kv{display:grid;grid-template-columns:160px 1fr;gap:6px 16px;font-size:14px}
+  .kv dt{color:var(--faint)} .kv dd{font-family:var(--mono);font-size:13px}
+  .statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:16px 0}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;text-align:center}
+  .stat .v{font-size:30px;font-weight:700;font-family:var(--mono)}
+  .stat .l{font-size:12.5px;color:var(--dim);margin-top:4px}
+  .lift{color:var(--green)}
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px;font-family:var(--mono)}
+  a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
+  .tag{font-size:11px;font-family:var(--mono);padding:1px 8px;border-radius:4px;vertical-align:middle;margin-left:6px}
+  .tag.v{background:#2ea04322;color:var(--green);border:1px solid #2ea04344}
+  .tag.live{background:#d2992222;color:var(--amber);border:1px solid #d2992244}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Poetiq「递归自我改进编码」复现报告
+      <span class="en">Reproducing Poetiq's Recursive Self-Improvement Coding · metaharness</span>
+    </h1>
+    <div class="meta">2026-06-09 · ~/work/poetic · 复现对象: poetiq.ai/posts/recursive_self_improvement_coding</div>
+    <div class="chips">
+      <span class="chip ok">✓ 机制复现成功</span>
+      <span class="chip ok">✓ 弱模型 Lift +40pp</span>
+      <span class="chip ok">✓ Codex 复查 PASS</span>
+      <span class="chip ok">✓ 34 tests green</span>
+      <span class="chip run">◌ LCB v6 前沿实验运行中</span>
+      <span class="chip info">引文核实 9/9 零幻觉</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<h2><span class="n">00</span>一句话结论</h2>
+<p>Poetiq 博文是黑箱(无代码/伪码/prompt),但其开源 ARC-AGI 仓库暴露了完整机制。我们把它泛化到通用代码任务,补建了其从未公开的外层 Meta-System,并<b>用真实模型测得了核心现象</b>:同一个 generate→verify→refine→vote harness,把弱模型 Qwen2.5-Coder-1.5B 从 <b class="num">40%</b> 拉到 <b class="num lift">80%</b>(+40pp,完全离线、零 API key)。系统通过了 Codex 三轮对抗式审查(最终裁决 <b class="pass">PASS</b>:"lift/transfer metrics can be trusted")。前沿模型在 LiveCodeBench v6 真题上的 evolve→transfer 实验正在运行。</p>
+
+<div class="statgrid">
+  <div class="stat"><div class="v">40%<span class="dim">→</span><span class="lift">80%</span></div><div class="l">弱模型 lift(Qwen2.5-Coder-1.5B,离线)</div></div>
+  <div class="stat"><div class="v">75%</div><div class="l">haiku base pass@1 @ LCB v6 med/hard<br>(headroom 确认,前沿实验成立)</div></div>
+  <div class="stat"><div class="v pass">PASS</div><div class="l">Codex 最终裁决(3 轮,10+2 findings 全闭环)</div></div>
+  <div class="stat"><div class="v">34</div><div class="l">单元测试全绿(含 spoof/死锁回归)</div></div>
+</div>
+
+<h2><span class="n">01</span>Poetiq 系统解构:两层</h2>
+<div class="grid2">
+  <div class="panel">
+    <h3>Layer 1 · 内层 Harness(开源,已忠实复现)</h3>
+    <div class="flow">
+      <span class="fbox">generate<br><span class="dim">LLM 写程序</span></span><span class="farr">→</span>
+      <span class="fbox">verify<br><span class="dim">跑可见测试</span></span><span class="farr">→</span>
+      <span class="fbox">refine<br><span class="dim">执行反馈迭代</span></span><span class="farr">→</span>
+      <span class="fbox">vote<br><span class="dim">多专家共识</span></span>
+    </div>
+    <p class="dim" style="font-size:13.5px">可见 I/O 对 = 免费可执行 verifier;失败时把 expected-vs-got diff 按 improving order 喂回;N 个并行专家按行为签名聚类多数投票。本质 = AlphaCodium/Reflexion + 执行接地的自修复 + verifier 上的投票。</p>
+  </div>
+  <div class="panel">
+    <h3>Layer 2 · Meta-System(从未公开,我们的重建)</h3>
+    <div class="flow">
+      <span class="fbox">genome<br><span class="dim">旋钮+prompt</span></span><span class="farr">→</span>
+      <span class="fbox">proposer<br><span class="dim">LLM 读失败迹改写</span></span><span class="farr">→</span>
+      <span class="fbox">δ-margin 选择<br><span class="dim">cost-aware J</span></span><span class="farr">→</span>
+      <span class="fbox">H* transfer<br><span class="dim">冻结跨模型</span></span>
+    </div>
+    <p class="dim" style="font-size:13.5px">外层循环只在 dev 模型上优化("learn once"),冻结 H* 原样迁移到其他模型("use everywhere")。指标:Mean Held-out Lift / Transfer Ratio / Leapfrog Rate。明确标注为我们的设计——复刻 Poetiq 秘方是 reverse-engineering 而非 replication。</p>
+  </div>
+</div>
+
+<h2><span class="n">02</span>测得的结果</h2>
+
+<h3>① 弱模型 Lift —— 核心现象复现 <span class="tag v">REAL RUN</span></h3>
+<p>Qwen2.5-Coder-1.5B(CPU,本地,零 API)· harness = 2 experts × ≤3 iters + vote · 判分只用隐藏测试:</p>
+<table>
+  <tr><th>任务</th><th>base 单发</th><th>+ harness</th><th></th></tr>
+  <tr><td class="num">two_sum</td><td class="fail num">fail</td><td class="pass num">PASS</td><td class="lift num">← 救回</td></tr>
+  <tr><td class="num">word_break</td><td class="fail num">fail</td><td class="pass num">PASS</td><td class="lift num">← 救回</td></tr>
+  <tr><td class="num">num_decodings</td><td class="fail num">fail</td><td class="fail num">fail</td><td></td></tr>
+  <tr><td class="num">coin_change</td><td class="pass num">PASS</td><td class="pass num">PASS</td><td></td></tr>
+  <tr><td class="num">edit_distance</td><td class="pass num">PASS</td><td class="pass num">PASS</td><td></td></tr>
+  <tr><td><b>合计</b></td><td class="num"><b>40%</b></td><td class="num"><b class="lift">80%</b></td><td class="num lift"><b>+40pp</b></td></tr>
+</table>
+<p class="dim" style="font-size:13.5px">这正是 Poetiq 报告的「低基座模型大幅提升」regime(Kimi 50→79.9 同类现象)——纯靠执行反馈,无微调、无特权访问。</p>
+
+<h3>② 前沿模型 · LiveCodeBench v6 真题 <span class="tag live">运行中</span></h3>
+<table>
+  <tr><th>阶段</th><th>状态</th><th>数字</th></tr>
+  <tr><td>mini-bench 上的天花板效应</td><td class="pass num">已确认</td><td class="num">haiku/sonnet base = 100%(LeetCode 类题已记忆,无 headroom)→ 换真 benchmark</td></tr>
+  <tr><td>LCB v6 adapter(112 道 2025 AtCoder stdin 题)</td><td class="pass num">完成</td><td class="num">公开样例=可见 verifier;解码 private tests=隐藏判分</td></tr>
+  <tr><td>headroom 探测(med/hard 8 题)</td><td class="pass num">完成</td><td class="num">haiku base pass@1 = <b>75%</b> → 提升空间存在</td></tr>
+  <tr><td>evolve on haiku(12 dev)→ transfer 到 sonnet(24 test)+ ablation</td><td class="warn num">运行中</td><td class="num">seed dev_acc=66.7%;gen-1 持平→被严格 δ 准则正确拒绝</td></tr>
+</table>
+
+<h3>③ Meta-search 行为验证</h3>
+<p class="dim" style="font-size:13.5px">严格接受准则(strict &gt; + δ)在两次真实运行中均正确拒绝了无改进变异——不会把噪声当成进步;这是 recon 指出的「attribution collapse」风险的第一道防线。决定性 ablation(meta-H* vs 强手工 harness vs base)内置在 driver 里,随 LCB 运行一并产出。</p>
+
+<h2><span class="n">03</span>Codex 对抗式复查(目标第二项)</h2>
+<table>
+  <tr><th>轮次</th><th>发现</th><th>处置</th></tr>
+  <tr><td class="num">R1</td><td>10 findings:<b class="fail">CRITICAL</b> 沙箱结果信道可伪造;HIGH 投票探针泄漏隐藏输入;HIGH Transfer Ratio 静默 NaN;5×MEDIUM;2×LOW</td><td class="pass">全部修复(commit 1e0e23d)</td></tr>
+  <tr><td class="num">R2</td><td>8/10 确认解决;新发现:temp-file 信道同 UID 可发现 + 其环境 pytest 因 preexec_fn 多线程 fork <b class="fail">死锁</b></td><td class="pass">重新设计:runner 自施加 rlimits + nonce 认证 stdout 信道,去掉 reader 线程</td></tr>
+  <tr><td class="num">R3</td><td>逐条复核 + 实际跑通 34 tests + spoof 攻击向量逐一验证</td><td class="pass"><b>最终裁决 PASS</b></td></tr>
+</table>
+<div class="quote">"Both prior findings (HANG and SPOOF) are fully resolved … <b>The lift/transfer metrics produced by this harness can be trusted</b>: the result channel is authenticated by a per-run nonce, candidate stdout is isolated, timeouts kill the full process group, and no reader-thread deadlock path exists." — Codex, final verdict</div>
+
+<h2><span class="n">04</span>诚实的可复现边界</h2>
+<table>
+  <tr><th>项</th><th>状态</th><th>说明</th></tr>
+  <tr><td>内层 harness 机制</td><td class="pass">✅ 复现</td><td>忠实泛化自其开源 ARC 仓库</td></tr>
+  <tr><td>弱模型 lift 现象</td><td class="pass">✅ 复现</td><td>+40pp,离线实测</td></tr>
+  <tr><td>Meta-System 外层 + transfer 协议</td><td class="pass">✅ 重建并运行</td><td>Poetiq 从未公开算法——这是 reverse-engineering</td></tr>
+  <tr><td>前沿模型在真 benchmark 的 lift/transfer</td><td class="warn">◌ 运行中</td><td>LCB v6,haiku→sonnet</td></tr>
+  <tr><td>Poetiq 确切数字(GPT-5.5 93.9% 等)</td><td class="fail">✗ 受限</td><td>需 GPT-5.5/Gemini-3.1 + gated LCB-Pro + 未公开外层;<b>连其开源代码也用的是更老的模型,从未产出过那张表</b></td></tr>
+</table>
+
+<h2><span class="n">05</span>两篇 Paper 站位(引文已逐一核实)</h2>
+<div class="grid2">
+  <div class="panel">
+    <h3>Method Paper</h3>
+    <p style="font-size:13.5px">可执行 verifier 驱动的 harness 元搜索:单模型优化一次、免费单测信号、零样本跨厂商迁移、hard 档/低基座集中增益。</p>
+    <p class="dim" style="font-size:13px">必须正面对比:<b>Meta-Harness</b>(2603.28052,+4.7 跨 5 held-out 模型)、<b>Life-Harness</b>(2605.22166,Qwen3-4B 优化→17 backbone 迁移,最近的直接竞争者)、ADAS(ICLR'25)、DGM(UBC/Sakana,ICLR'26)、AlphaEvolve。</p>
+  </div>
+  <div class="panel">
+    <h3>Benchmark Paper · TransferLift-Bench</h3>
+    <p style="font-size:13.5px">评测单位是 <b>meta-system</b> 而非融合 agent;指标 = Transfer-Normalized Lift 三元组(Mean Held-out Lift / Transfer Ratio / Leapfrog Rate)。</p>
+    <p class="dim" style="font-size:13px">动机引文:<i>Stop Comparing LLM Agents Without Disclosing the Harness</i>(2605.23950);最近对手 Harness-Bench(2605.27922,固定 harness、无优化器无迁移);"Model Drifting" 引 PromptBridge(2512.01420)。</p>
+  </div>
+</div>
+<p class="dim" style="font-size:13px">核实结论:9 篇全部真实、arXiv ID 全对、零幻觉;修正 3 处(Auto-Enhance 无 arXiv 须用 OpenReview;DGM 归属 UBC/Vector+Sakana;MIPROv2→MIPRO)。</p>
+
+<h2><span class="n">06</span>系统与工程</h2>
+<div class="kv panel">
+  <dt>仓库</dt><dd>~/work/poetic · 10 commits · 全部提交</dd>
+  <dt>包结构</dt><dd>metaharness/{types, sandbox, _sandbox_runner, llm, prompts, config, harness, meta, bench}</dd>
+  <dt>模型后端</dt><dd>ClaudeCLIBackend(claude -p,零 key)· LocalHFBackend(CPU)· OpenAI/Gemini/Anthropic SDK(外部全量复现用)· 磁盘缓存可断点续跑</dd>
+  <dt>沙箱</dt><dd>子进程 + per-test SIGALRM + 自施加 rlimits(AS/CPU/NPROC)+ 进程组击杀 + nonce 认证结果信道(stdout→/dev/null)</dd>
+  <dt>基准</dt><dd>mini-codebench 20 题(参考解构建时校验)+ LiveCodeBench v6 112 题 stdin adapter</dd>
+  <dt>测试</dt><dd>34 pytest(MockBackend,无 LLM/网络)含 spoof 与并发死锁回归</dd>
+  <dt>本轮实测开销</dt><dd>claude API ≈ $7(缓存后复跑近免费)· 本地 CPU 运行 $0</dd>
+</div>
+
+<h2><span class="n">07</span>下一步</h2>
+<table>
+  <tr><th></th><th>动作</th><th>产出</th></tr>
+  <tr><td class="num">1</td><td>LCB v6 运行收尾(后台)</td><td>前沿模型 base→H*→transfer + ablation 第一组真数字 → 回填 README/paper</td></tr>
+  <tr><td class="num">2</td><td>规模化:全部 86 道 med/hard + opus 第三模型</td><td>transfer 矩阵 + per-tier 曲线(对照 Poetiq 表的"形状")</td></tr>
+  <tr><td class="num">3</td><td>接外部 key(Gemini/GPT)+ LCB-Pro 切片</td><td>$300–700 档 credible partial repro(接口已留好)</td></tr>
+  <tr><td class="num">4</td><td>Method paper 头对头:Meta-Harness / Life-Harness 同套件对比</td><td>论文实验节核心证据</td></tr>
+</table>
+
+<footer>
+  metaharness · 复现自 poetiq.ai/posts/recursive_self_improvement_coding + github.com/poetiq-ai/poetiq-arc-agi-solver(机制逆向)·
+  与 Poetiq 无关联 · 报告生成于 2026-06-09 · Claude Code
+</footer>
+
+</div>
+</body>
+</html>
