@@ -6,66 +6,67 @@
 <title>Poetiq RSI Reproduction Report · metaharness</title>
 <style>
   :root{
-    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --line:#2d333b;
-    --txt:#e6edf3; --dim:#9da7b3; --faint:#6e7a87;
-    --green:#3fb950; --amber:#d29922; --red:#f85149; --blue:#58a6ff; --purple:#bc8cff;
+    --bg:#f6f8fa; --panel:#ffffff; --panel2:#eef1f5; --line:#d7dde4;
+    --txt:#1f2328; --dim:#59636e; --faint:#8c959f;
+    --green:#1a7f37; --amber:#9a6700; --red:#cf222e; --blue:#0969da; --purple:#8250df;
+    --shadow:0 1px 3px rgba(31,35,40,.07),0 1px 2px rgba(31,35,40,.04);
     --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--txt);font:15px/1.65 -apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB",sans-serif;padding:0 0 80px}
   .wrap{max-width:980px;margin:0 auto;padding:0 28px}
   header{border-bottom:1px solid var(--line);padding:48px 0 32px;margin-bottom:36px;
-    background:linear-gradient(180deg,#11151c 0%,var(--bg) 100%)}
-  h1{font-size:30px;font-weight:700;letter-spacing:-.5px}
+    background:linear-gradient(180deg,#eaf1fb 0%,var(--bg) 100%)}
+  h1{font-size:30px;font-weight:700;letter-spacing:-.5px;color:#0b1320}
   h1 .sub{display:block;font-size:15px;color:var(--dim);font-weight:400;margin-top:6px;font-family:var(--mono)}
   .meta{color:var(--faint);font-size:13px;margin-top:14px;font-family:var(--mono)}
   .chips{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
-  .chip{font-size:12.5px;font-family:var(--mono);padding:4px 12px;border-radius:999px;border:1px solid var(--line)}
-  .chip.ok{color:var(--green);border-color:#2ea04366;background:#2ea04314}
-  .chip.run{color:var(--amber);border-color:#d2992266;background:#d2992214}
-  .chip.info{color:var(--blue);border-color:#58a6ff55;background:#58a6ff12}
-  h2{font-size:20px;margin:44px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .chip{font-size:12.5px;font-family:var(--mono);padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:#fff}
+  .chip.ok{color:var(--green);border-color:#1a7f3755;background:#1a7f3712}
+  .chip.run{color:var(--amber);border-color:#9a670055;background:#9a670012}
+  .chip.info{color:var(--blue);border-color:#0969da44;background:#0969da10}
+  h2{font-size:20px;margin:44px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--line);color:#0b1320}
   h2 .n{color:var(--purple);font-family:var(--mono);font-size:16px;margin-right:8px}
   h3{font-size:15.5px;margin:22px 0 10px;color:var(--blue)}
   p{margin:10px 0;color:var(--txt)}
   .dim{color:var(--dim)}
-  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:14px 0}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:14px 0;box-shadow:var(--shadow)}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:760px){.grid2{grid-template-columns:1fr}}
-  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
-  th{color:var(--dim);font-weight:600;text-align:left;padding:8px 10px;border-bottom:2px solid var(--line);font-size:13px}
-  td{padding:8px 10px;border-bottom:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+  th{color:var(--dim);font-weight:600;text-align:left;padding:9px 12px;border-bottom:2px solid var(--line);font-size:13px;background:#f0f3f7}
+  td{padding:9px 12px;border-bottom:1px solid var(--line)}
   tr:last-child td{border-bottom:none}
   .num{font-family:var(--mono)}
   .big{font-size:26px;font-weight:700;font-family:var(--mono)}
   .pass{color:var(--green)} .fail{color:var(--red)} .warn{color:var(--amber)}
-  code,.code{font-family:var(--mono);font-size:13px;background:var(--panel2);padding:2px 6px;border-radius:5px;color:#a5d6ff}
+  code,.code{font-family:var(--mono);font-size:13px;background:var(--panel2);padding:2px 6px;border-radius:5px;color:#0550ae}
   pre{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow-x:auto;
-    font-family:var(--mono);font-size:12.5px;line-height:1.6;color:#c9d1d9;margin:12px 0}
+    font-family:var(--mono);font-size:12.5px;line-height:1.6;color:#1f2328;margin:12px 0}
   .flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;margin:14px 0}
   .fbox{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 14px}
   .farr{color:var(--faint)}
-  .quote{border-left:3px solid var(--green);padding:10px 16px;background:#2ea0430d;border-radius:0 8px 8px 0;margin:14px 0;font-style:italic;color:var(--dim)}
+  .quote{border-left:3px solid var(--green);padding:12px 16px;background:#1a7f370c;border-radius:0 8px 8px 0;margin:14px 0;font-style:italic;color:var(--dim)}
   .quote b{color:var(--green);font-style:normal}
   .kv{display:grid;grid-template-columns:160px 1fr;gap:6px 16px;font-size:14px}
   .kv dt{color:var(--faint)} .kv dd{font-family:var(--mono);font-size:13px}
   .statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:16px 0}
-  .stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;text-align:center}
-  .stat .v{font-size:30px;font-weight:700;font-family:var(--mono)}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;text-align:center;box-shadow:var(--shadow)}
+  .stat .v{font-size:30px;font-weight:700;font-family:var(--mono);color:#0b1320}
   .stat .l{font-size:12.5px;color:var(--dim);margin-top:4px}
   .lift{color:var(--green)}
   footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px;font-family:var(--mono)}
   a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
   .tag{font-size:11px;font-family:var(--mono);padding:1px 8px;border-radius:4px;vertical-align:middle;margin-left:6px}
-  .tag.v{background:#2ea04322;color:var(--green);border:1px solid #2ea04344}
-  .tag.live{background:#d2992222;color:var(--amber);border:1px solid #d2992244}
+  .tag.v{background:#1a7f3718;color:var(--green);border:1px solid #1a7f3744}
+  .tag.live{background:#9a670018;color:var(--amber);border:1px solid #9a670044}
   /* language toggle */
   .zh{display:none}
   html[data-lang="zh"] .en{display:none}
   html[data-lang="zh"] .zh{display:inline}
   #langtoggle{position:fixed;top:16px;right:16px;z-index:99;font-family:var(--mono);font-size:13px;
-    background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:999px;
-    padding:6px 16px;cursor:pointer;box-shadow:0 2px 10px #0006}
+    background:#fff;color:var(--txt);border:1px solid var(--line);border-radius:999px;
+    padding:6px 16px;cursor:pointer;box-shadow:var(--shadow)}
   #langtoggle:hover{border-color:var(--blue);color:var(--blue)}
 </style>
 <script>
@@ -82,13 +83,13 @@
     <h1><span class="en">Reproducing Poetiq's Recursive Self-Improvement Coding</span><span class="zh">Poetiq「递归自我改进编码」复现报告</span>
       <span class="sub">metaharness</span>
     </h1>
-    <div class="meta">2026-06-09 · ~/work/poetic · <span class="en">reproduces:</span><span class="zh">复现对象:</span> poetiq.ai/posts/recursive_self_improvement_coding</div>
+    <div class="meta">2026-06-10 · ~/work/poetic · <span class="en">reproduces:</span><span class="zh">复现对象:</span> poetiq.ai/posts/recursive_self_improvement_coding</div>
     <div class="chips">
       <span class="chip ok">✓ <span class="en">Mechanism reproduced</span><span class="zh">机制复现成功</span></span>
       <span class="chip ok">✓ <span class="en">Weak-model lift +40pp</span><span class="zh">弱模型 Lift +40pp</span></span>
+      <span class="chip ok">✓ <span class="en">Frontier transfer +16.7pp · ratio 1.33</span><span class="zh">前沿迁移 +16.7pp · ratio 1.33</span></span>
       <span class="chip ok">✓ Codex <span class="en">review</span><span class="zh">复查</span> PASS</span>
       <span class="chip ok">✓ 34 tests green</span>
-      <span class="chip run">◌ <span class="en">LCB v6 frontier run in progress</span><span class="zh">LCB v6 前沿实验运行中</span></span>
       <span class="chip info"><span class="en">Citations 9/9 verified · zero hallucination</span><span class="zh">引文核实 9/9 零幻觉</span></span>
     </div>
   </div>
@@ -97,12 +98,12 @@
 <div class="wrap">
 
 <h2><span class="n">00</span><span class="en">TL;DR</span><span class="zh">一句话结论</span></h2>
-<p><span class="en">Poetiq's post is a black box (no code, pseudocode, or prompts), but their open-source ARC-AGI repo exposes the full mechanism. We generalized it to general code tasks, rebuilt the outer Meta-System they never published, and <b>measured the core phenomenon with real models</b>: the same generate→verify→refine→vote harness lifts the weak Qwen2.5-Coder-1.5B from <b class="num">40%</b> to <b class="num lift">80%</b> (+40pp, fully offline, zero API key). The system passed three adversarial rounds of Codex review (final verdict <b class="pass">PASS</b>: "lift/transfer metrics can be trusted"). The frontier-model evolve→transfer experiment on LiveCodeBench v6 is running.</span><span class="zh">Poetiq 博文是黑箱(无代码/伪码/prompt),但其开源 ARC-AGI 仓库暴露了完整机制。我们把它泛化到通用代码任务,补建了其从未公开的外层 Meta-System,并<b>用真实模型测得了核心现象</b>:同一个 generate→verify→refine→vote harness,把弱模型 Qwen2.5-Coder-1.5B 从 <b class="num">40%</b> 拉到 <b class="num lift">80%</b>(+40pp,完全离线、零 API key)。系统通过了 Codex 三轮对抗式审查(最终裁决 <b class="pass">PASS</b>:"lift/transfer metrics can be trusted")。前沿模型在 LiveCodeBench v6 真题上的 evolve→transfer 实验正在运行。</span></p>
+<p><span class="en">Poetiq's post is a black box (no code, pseudocode, or prompts), but their open-source ARC-AGI repo exposes the full mechanism. We generalized it to general code tasks, rebuilt the outer Meta-System they never published, and <b>measured the result with real models</b>: the same generate→verify→refine→vote harness lifts the weak Qwen2.5-Coder-1.5B from <b class="num">40%</b> to <b class="num lift">80%</b> (offline, zero API key), and on real LiveCodeBench v6 competitive problems lifts <b>claude:sonnet +16.7pp</b> when transferred unchanged from haiku (transfer ratio <b class="num">1.33</b>, leapfrog <b class="num">100%</b>). The system passed three adversarial rounds of Codex review (final verdict <b class="pass">PASS</b>: "lift/transfer metrics can be trusted").</span><span class="zh">Poetiq 博文是黑箱(无代码/伪码/prompt),但其开源 ARC-AGI 仓库暴露了完整机制。我们把它泛化到通用代码任务,补建了其从未公开的外层 Meta-System,并<b>用真实模型测得了结果</b>:同一个 generate→verify→refine→vote harness 把弱模型 Qwen2.5-Coder-1.5B 从 <b class="num">40%</b> 拉到 <b class="num lift">80%</b>(离线、零 API key);在 LiveCodeBench v6 真实竞赛题上,从 haiku 原样迁移到 <b>claude:sonnet 提升 +16.7pp</b>(transfer ratio <b class="num">1.33</b>,leapfrog <b class="num">100%</b>)。系统通过 Codex 三轮对抗式审查(最终裁决 <b class="pass">PASS</b>:"lift/transfer metrics can be trusted")。</span></p>
 
 <div class="statgrid">
-  <div class="stat"><div class="v">40%<span class="dim">→</span><span class="lift">80%</span></div><div class="l"><span class="en">Weak-model lift (Qwen2.5-Coder-1.5B, offline)</span><span class="zh">弱模型 lift(Qwen2.5-Coder-1.5B,离线)</span></div></div>
-  <div class="stat"><div class="v">75%</div><div class="l"><span class="en">haiku base pass@1 @ LCB v6 med/hard<br>(headroom confirmed → frontier exp is valid)</span><span class="zh">haiku base pass@1 @ LCB v6 med/hard<br>(headroom 确认,前沿实验成立)</span></div></div>
-  <div class="stat"><div class="v pass">PASS</div><div class="l"><span class="en">Codex final verdict (3 rounds, 10+2 findings all closed)</span><span class="zh">Codex 最终裁决(3 轮,10+2 findings 全闭环)</span></div></div>
+  <div class="stat"><div class="v">40%<span class="dim">→</span><span class="lift">80%</span></div><div class="l"><span class="en">Weak-model lift (Qwen-1.5B, offline)</span><span class="zh">弱模型 lift(Qwen-1.5B,离线)</span></div></div>
+  <div class="stat"><div class="v lift">+16.7pp</div><div class="l"><span class="en">Frontier transfer: sonnet on LCB v6<br>(ratio 1.33 · leapfrog 100%)</span><span class="zh">前沿迁移:sonnet @ LCB v6<br>(ratio 1.33 · leapfrog 100%)</span></div></div>
+  <div class="stat"><div class="v pass">PASS</div><div class="l"><span class="en">Codex final verdict (3 rounds, 10+2 findings closed)</span><span class="zh">Codex 最终裁决(3 轮,10+2 findings 全闭环)</span></div></div>
   <div class="stat"><div class="v">34</div><div class="l"><span class="en">Unit tests green (incl. spoof/deadlock regression)</span><span class="zh">单元测试全绿(含 spoof/死锁回归)</span></div></div>
 </div>
 
@@ -132,30 +133,26 @@
 
 <h2><span class="n">02</span><span class="en">Measured results</span><span class="zh">测得的结果</span></h2>
 
-<h3><span class="en">① Weak-model lift — core phenomenon reproduced</span><span class="zh">① 弱模型 Lift —— 核心现象复现</span> <span class="tag v">REAL RUN</span></h3>
-<p><span class="en">Qwen2.5-Coder-1.5B (CPU, local, zero API) · harness = 2 experts × ≤3 iters + vote · scored only on hidden tests:</span><span class="zh">Qwen2.5-Coder-1.5B(CPU,本地,零 API)· harness = 2 experts × ≤3 iters + vote · 判分只用隐藏测试:</span></p>
-<table>
-  <tr><th><span class="en">Task</span><span class="zh">任务</span></th><th><span class="en">base single-shot</span><span class="zh">base 单发</span></th><th>+ harness</th><th></th></tr>
-  <tr><td class="num">two_sum</td><td class="fail num">fail</td><td class="pass num">PASS</td><td class="lift num"><span class="en">← recovered</span><span class="zh">← 救回</span></td></tr>
-  <tr><td class="num">word_break</td><td class="fail num">fail</td><td class="pass num">PASS</td><td class="lift num"><span class="en">← recovered</span><span class="zh">← 救回</span></td></tr>
-  <tr><td class="num">num_decodings</td><td class="fail num">fail</td><td class="fail num">fail</td><td></td></tr>
-  <tr><td class="num">coin_change</td><td class="pass num">PASS</td><td class="pass num">PASS</td><td></td></tr>
-  <tr><td class="num">edit_distance</td><td class="pass num">PASS</td><td class="pass num">PASS</td><td></td></tr>
-  <tr><td><b><span class="en">Total</span><span class="zh">合计</span></b></td><td class="num"><b>40%</b></td><td class="num"><b class="lift">80%</b></td><td class="num lift"><b>+40pp</b></td></tr>
-</table>
-<p class="dim" style="font-size:13.5px"><span class="en">This is exactly Poetiq's "large gains on low-base models" regime (the Kimi 50→79.9 effect) — purely from execution feedback, no fine-tuning, no privileged access.</span><span class="zh">这正是 Poetiq 报告的「低基座模型大幅提升」regime(Kimi 50→79.9 同类现象)——纯靠执行反馈,无微调、无特权访问。</span></p>
+<h3><span class="en">① Weak-model inner-harness lift — core phenomenon</span><span class="zh">① 弱模型内层 Lift —— 核心现象</span> <span class="tag v">REAL RUN</span></h3>
+<p><span class="en">Qwen2.5-Coder-1.5B (CPU, local, zero API) · harness = 2 experts × ≤3 iters + vote · scored only on hidden tests: <b>40% → 80% (+40pp)</b>, recovering 2 of 3 single-shot failures (<code>two_sum</code>, <code>word_break</code>) purely from execution feedback. This is Poetiq's "large gains on low-base models" regime (the Kimi 50→79.9 effect).</span><span class="zh">Qwen2.5-Coder-1.5B(CPU,本地,零 API)· harness = 2 experts × ≤3 iters + vote · 判分只用隐藏测试:<b>40% → 80%(+40pp)</b>,把 3 道单发失败里的 2 道(<code>two_sum</code>、<code>word_break</code>)纯靠执行反馈救回。正是 Poetiq 的「低基座模型大幅提升」regime(Kimi 50→79.9 同类现象)。</span></p>
 
-<h3><span class="en">② Frontier models · LiveCodeBench v6 real problems</span><span class="zh">② 前沿模型 · LiveCodeBench v6 真题</span> <span class="tag live"><span class="en">running</span><span class="zh">运行中</span></span></h3>
+<h3><span class="en">② Frontier models · LiveCodeBench v6 — transfer + ablation</span><span class="zh">② 前沿模型 · LiveCodeBench v6 —— 迁移 + 消融</span> <span class="tag v">DONE · $57</span></h3>
+<p class="dim" style="font-size:13.5px"><span class="en">Real 2025 AtCoder problems (stdin, decoded private tests). Harness optimized on haiku (12 dev), frozen H* applied unchanged to a held-out 24-task split:</span><span class="zh">真实 2025 AtCoder 题(stdin,解码 private tests)。harness 在 haiku 上优化(12 dev),冻结 H* 原样迁移到 24 题 held-out:</span></p>
 <table>
-  <tr><th><span class="en">Stage</span><span class="zh">阶段</span></th><th><span class="en">Status</span><span class="zh">状态</span></th><th><span class="en">Numbers</span><span class="zh">数字</span></th></tr>
-  <tr><td><span class="en">ceiling effect on mini-bench</span><span class="zh">mini-bench 上的天花板效应</span></td><td class="pass num"><span class="en">confirmed</span><span class="zh">已确认</span></td><td class="num"><span class="en">haiku/sonnet base = 100% (memorized LeetCode-class, no headroom) → switch benchmark</span><span class="zh">haiku/sonnet base = 100%(LeetCode 类题已记忆,无 headroom)→ 换真 benchmark</span></td></tr>
-  <tr><td><span class="en">LCB v6 adapter (112 AtCoder-2025 stdin problems)</span><span class="zh">LCB v6 adapter(112 道 2025 AtCoder stdin 题)</span></td><td class="pass num"><span class="en">done</span><span class="zh">完成</span></td><td class="num"><span class="en">public examples = visible verifier; decoded private tests = hidden scoring</span><span class="zh">公开样例=可见 verifier;解码 private tests=隐藏判分</span></td></tr>
-  <tr><td><span class="en">headroom probe (med/hard, 8 problems)</span><span class="zh">headroom 探测(med/hard 8 题)</span></td><td class="pass num"><span class="en">done</span><span class="zh">完成</span></td><td class="num"><span class="en">haiku base pass@1 = <b>75%</b> → headroom exists</span><span class="zh">haiku base pass@1 = <b>75%</b> → 提升空间存在</span></td></tr>
-  <tr><td><span class="en">evolve on haiku (12 dev) → transfer to sonnet (24 test) + ablation</span><span class="zh">evolve on haiku(12 dev)→ transfer 到 sonnet(24 test)+ ablation</span></td><td class="warn num"><span class="en">running</span><span class="zh">运行中</span></td><td class="num"><span class="en">seed dev_acc=66.7%; gen-1 ties → correctly rejected by strict δ rule</span><span class="zh">seed dev_acc=66.7%;gen-1 持平→被严格 δ 准则正确拒绝</span></td></tr>
+  <tr><th><span class="en">model</span><span class="zh">模型</span></th><th><span class="en">base pass@1</span><span class="zh">base 单发</span></th><th>+ H*</th><th>lift</th></tr>
+  <tr><td class="num">claude:haiku <span class="dim"><span class="en">(dev)</span><span class="zh">(开发模型)</span></span></td><td class="num">54.2%</td><td class="num pass">66.7%</td><td class="num lift">+12.5pp</td></tr>
+  <tr><td class="num">claude:sonnet <span class="dim"><span class="en">(held-out)</span><span class="zh">(留出)</span></span></td><td class="num">50.0%</td><td class="num pass">66.7%</td><td class="num lift">+16.7pp</td></tr>
+</table>
+<p><span class="en"><b>Mean held-out lift +16.7% · Transfer Ratio 1.33 · Leapfrog 100%.</b> The frozen harness transfers from haiku to sonnet with an <i>even larger</i> lift (ratio &gt; 1) — the opposite of prompt-level "Model Drifting", and clears the ≥0.7 acceptance bar. Ablation on the dev model / held-out split:</span><span class="zh"><b>Mean held-out lift +16.7% · Transfer Ratio 1.33 · Leapfrog 100%。</b>冻结 harness 从 haiku 迁到 sonnet 反而提升<i>更大</i>(ratio &gt; 1)——与 prompt 级「Model Drifting」相反,超过 ≥0.7 验收线。dev 模型上的消融:</span></p>
+<table>
+  <tr><th>harness</th><th>acc</th><th></th></tr>
+  <tr><td class="num">base (pass@1)</td><td class="num">54.2%</td><td></td></tr>
+  <tr><td class="num">hand_designed_strong <span class="dim">(E4·it8)</span></td><td class="num">62.5%</td><td></td></tr>
+  <tr><td class="num">meta_H* <span class="dim">(E2·it3·vote)</span></td><td class="num pass">66.7%</td><td class="lift num"><span class="en">best</span><span class="zh">最佳</span></td></tr>
 </table>
 
-<h3><span class="en">③ Meta-search behavior check</span><span class="zh">③ Meta-search 行为验证</span></h3>
-<p class="dim" style="font-size:13.5px"><span class="en">The strict acceptance rule (strict &gt; + δ) correctly rejected no-improvement mutations in both real runs — it won't mistake noise for progress; this is the first line of defense against the "attribution collapse" risk recon flagged. The decisive ablation (meta-H* vs strong hand-designed harness vs base) is built into the driver and is produced together with the LCB run.</span><span class="zh">严格接受准则(strict &gt; + δ)在两次真实运行中均正确拒绝了无改进变异——不会把噪声当成进步;这是 recon 指出的「attribution collapse」风险的第一道防线。决定性 ablation(meta-H* vs 强手工 harness vs base)内置在 driver 里,随 LCB 运行一并产出。</span></p>
+<h3><span class="en">③ Outer-loop self-improvement &amp; honest attribution</span><span class="zh">③ 外层自我改进 &amp; 诚实归因</span></h3>
+<p class="dim" style="font-size:13.5px"><span class="en"><b>The outer loop demonstrably self-improves when the seed has headroom:</b> on the weak Qwen-1.5B, starting from a single-shot seed (dev_acc 33%), the haiku proposer discovered <code>E=2·it=3·vote</code> and the loop accepted it → <b class="lift">67%</b> (+33pp), then correctly <b>rejected</b> the next no-gain mutation. <b>But</b> on the LCB-v6 dev set the seed harness was already good, and the meta-search found nothing beating it (all 4 proposals tied → all rejected, no overfitting). So the frontier lift in ② is the <i>inner-harness</i> effect transferring across models — not a meta-optimizer gain on that benchmark. The strict-δ rule never mistook noise for progress in any run; the decisive ablation (meta-H* ≥ hand-designed ≥ base) is built in. This honest split (when the outer loop helps vs. when the inner loop carries it) is exactly the "attribution" question the method paper must answer.</span><span class="zh"><b>当 seed 有提升空间时,外层会切实自我改进:</b>在弱模型 Qwen-1.5B 上,从单发 seed(dev_acc 33%)出发,haiku proposer 发现了 <code>E=2·it=3·vote</code> 并被接受 → <b class="lift">67%</b>(+33pp),随后正确<b>拒绝</b>了下一个无增益变异。<b>但</b>在 LCB v6 dev 集上 seed 本就不弱,元搜索没找到更优解(4 个提议全部持平 → 全拒,无过拟合)。所以 ② 里的前沿提升是<i>内层 harness</i> 跨模型迁移的效果,而非该 benchmark 上的元优化增益。严格 δ 准则在所有运行中都没把噪声当进步;决定性消融(meta-H* ≥ 手工 ≥ base)已内置。这个诚实的区分(外层何时起作用 vs 内层何时主导)正是 method paper 必须回答的「归因」问题。</span></p>
 
 <h2><span class="n">03</span><span class="en">Codex adversarial review (goal item #2)</span><span class="zh">Codex 对抗式复查(目标第二项)</span></h2>
 <table>
@@ -170,10 +167,9 @@
 <table>
   <tr><th><span class="en">Item</span><span class="zh">项</span></th><th><span class="en">Status</span><span class="zh">状态</span></th><th><span class="en">Note</span><span class="zh">说明</span></th></tr>
   <tr><td><span class="en">inner harness mechanism</span><span class="zh">内层 harness 机制</span></td><td class="pass">✅ <span class="en">reproduced</span><span class="zh">复现</span></td><td><span class="en">faithfully generalized from their open ARC repo</span><span class="zh">忠实泛化自其开源 ARC 仓库</span></td></tr>
-  <tr><td><span class="en">weak-model lift phenomenon</span><span class="zh">弱模型 lift 现象</span></td><td class="pass">✅ <span class="en">reproduced</span><span class="zh">复现</span></td><td><span class="en">+40pp, measured offline</span><span class="zh">+40pp,离线实测</span></td></tr>
-  <tr><td><span class="en">Meta-System outer loop + transfer protocol</span><span class="zh">Meta-System 外层 + transfer 协议</span></td><td class="pass">✅ <span class="en">rebuilt & running</span><span class="zh">重建并运行</span></td><td><span class="en">Poetiq never published the algorithm — this is reverse-engineering</span><span class="zh">Poetiq 从未公开算法——这是 reverse-engineering</span></td></tr>
-  <tr><td><span class="en">frontier-model lift/transfer on a real benchmark</span><span class="zh">前沿模型在真 benchmark 的 lift/transfer</span></td><td class="warn">◌ <span class="en">running</span><span class="zh">运行中</span></td><td><span class="en">LCB v6, haiku→sonnet</span><span class="zh">LCB v6,haiku→sonnet</span></td></tr>
-  <tr><td><span class="en">Poetiq's exact numbers (GPT-5.5 93.9% etc.)</span><span class="zh">Poetiq 确切数字(GPT-5.5 93.9% 等)</span></td><td class="fail">✗ <span class="en">gated</span><span class="zh">受限</span></td><td><span class="en">needs GPT-5.5/Gemini-3.1 + gated LCB-Pro + their unpublished outer loop; <b>even their open code used older models and never produced that table</b></span><span class="zh">需 GPT-5.5/Gemini-3.1 + gated LCB-Pro + 未公开外层;<b>连其开源代码也用的是更老的模型,从未产出过那张表</b></span></td></tr>
+  <tr><td><span class="en">weak-model lift phenomenon</span><span class="zh">弱模型 lift 现象</span></td><td class="pass">✅ <span class="en">reproduced</span><span class="zh">复现</span></td><td><span class="en">+40pp offline; outer loop self-improves 33→67 from a single-shot seed</span><span class="zh">+40pp 离线;外层从单发 seed 自改进 33→67</span></td></tr>
+  <tr><td><span class="en">frontier lift + cross-model transfer (real benchmark)</span><span class="zh">前沿 lift + 跨模型迁移(真 benchmark)</span></td><td class="pass">✅ <span class="en">reproduced</span><span class="zh">复现</span></td><td><span class="en">LCB v6: haiku +12.5pp, sonnet +16.7pp, ratio 1.33, leapfrog 100% — lift is inner-loop (meta-search tied its seed here)</span><span class="zh">LCB v6:haiku +12.5pp、sonnet +16.7pp、ratio 1.33、leapfrog 100% —— 提升来自内层(此处元搜索与 seed 持平)</span></td></tr>
+  <tr><td><span class="en">Poetiq's exact numbers (GPT-5.5 93.9% etc.)</span><span class="zh">Poetiq 确切数字(GPT-5.5 93.9% 等)</span></td><td class="fail">✗ <span class="en">gated</span><span class="zh">受限</span></td><td><span class="en">needs GPT-5.5/Gemini-3.1 + gated LCB-Pro + their unpublished outer loop; even their open code used older models and never produced that table</span><span class="zh">需 GPT-5.5/Gemini-3.1 + gated LCB-Pro + 未公开外层;连其开源代码也用更老的模型,从未产出过那张表</span></td></tr>
 </table>
 
 <h2><span class="n">05</span><span class="en">Two-paper positioning (citations individually verified)</span><span class="zh">两篇 Paper 站位(引文已逐一核实)</span></h2>
@@ -193,27 +189,27 @@
 
 <h2><span class="n">06</span><span class="en">System &amp; engineering</span><span class="zh">系统与工程</span></h2>
 <div class="kv panel">
-  <dt><span class="en">repo</span><span class="zh">仓库</span></dt><dd>~/work/poetic · 10 commits · <span class="en">all committed</span><span class="zh">全部提交</span></dd>
+  <dt><span class="en">repo</span><span class="zh">仓库</span></dt><dd>~/work/poetic · <span class="en">all committed</span><span class="zh">全部提交</span></dd>
   <dt><span class="en">package</span><span class="zh">包结构</span></dt><dd>metaharness/{types, sandbox, _sandbox_runner, llm, prompts, config, harness, meta, bench}</dd>
-  <dt><span class="en">model backends</span><span class="zh">模型后端</span></dt><dd>ClaudeCLIBackend (claude -p, <span class="en">zero key</span><span class="zh">零 key</span>) · LocalHFBackend (CPU) · OpenAI/Gemini/Anthropic SDK (<span class="en">external full repro</span><span class="zh">外部全量复现用</span>) · <span class="en">disk cache, resumable</span><span class="zh">磁盘缓存可断点续跑</span></dd>
-  <dt><span class="en">sandbox</span><span class="zh">沙箱</span></dt><dd><span class="en">subprocess + per-test SIGALRM + self-applied rlimits (AS/CPU/NPROC) + process-group kill + nonce-authenticated result channel (stdout→/dev/null)</span><span class="zh">子进程 + per-test SIGALRM + 自施加 rlimits(AS/CPU/NPROC)+ 进程组击杀 + nonce 认证结果信道(stdout→/dev/null)</span></dd>
-  <dt><span class="en">benchmarks</span><span class="zh">基准</span></dt><dd><span class="en">mini-codebench 20 tasks (built with reference-solution verification) + LiveCodeBench v6 112-task stdin adapter</span><span class="zh">mini-codebench 20 题(参考解构建时校验)+ LiveCodeBench v6 112 题 stdin adapter</span></dd>
+  <dt><span class="en">model backends</span><span class="zh">模型后端</span></dt><dd>ClaudeCLIBackend (claude -p, <span class="en">zero key</span><span class="zh">零 key</span>) · LocalHFBackend (CPU) · OpenAI/Gemini/Anthropic SDK · <span class="en">disk cache, resumable</span><span class="zh">磁盘缓存可断点续跑</span></dd>
+  <dt><span class="en">sandbox</span><span class="zh">沙箱</span></dt><dd><span class="en">subprocess + per-test SIGALRM + self-applied rlimits + process-group kill + nonce-authenticated result channel (stdout→/dev/null)</span><span class="zh">子进程 + per-test SIGALRM + 自施加 rlimits + 进程组击杀 + nonce 认证结果信道(stdout→/dev/null)</span></dd>
+  <dt><span class="en">benchmarks</span><span class="zh">基准</span></dt><dd><span class="en">mini-codebench 20 tasks + LiveCodeBench v6 stdin adapter (real AtCoder-2025)</span><span class="zh">mini-codebench 20 题 + LiveCodeBench v6 stdin adapter(真实 2025 AtCoder)</span></dd>
   <dt><span class="en">tests</span><span class="zh">测试</span></dt><dd><span class="en">34 pytest (MockBackend, no LLM/network) incl. spoof + concurrency-deadlock regression</span><span class="zh">34 pytest(MockBackend,无 LLM/网络)含 spoof 与并发死锁回归</span></dd>
-  <dt><span class="en">measured spend</span><span class="zh">本轮实测开销</span></dt><dd><span class="en">claude API ≈ $7 (near-free on cached re-runs) · local CPU runs $0</span><span class="zh">claude API ≈ $7(缓存后复跑近免费)· 本地 CPU 运行 $0</span></dd>
+  <dt><span class="en">measured spend</span><span class="zh">本轮实测开销</span></dt><dd><span class="en">claude API: weak-model + meta runs ≈ $7, LCB v6 frontier run $57 · local CPU $0</span><span class="zh">claude API:弱模型+meta 运行 ≈ $7,LCB v6 前沿运行 $57 · 本地 CPU $0</span></dd>
 </div>
 
 <h2><span class="n">07</span><span class="en">Next steps</span><span class="zh">下一步</span></h2>
 <table>
-  <tr><th></th><th><span class="en">Action</span><span class="zh">动作</span></th><th><span class="en">Output</span><span class="zh">产出</span></th></tr>
-  <tr><td class="num">1</td><td><span class="en">finish the LCB v6 run (background)</span><span class="zh">LCB v6 运行收尾(后台)</span></td><td><span class="en">first real frontier base→H*→transfer + ablation numbers → backfill README/paper</span><span class="zh">前沿模型 base→H*→transfer + ablation 第一组真数字 → 回填 README/paper</span></td></tr>
-  <tr><td class="num">2</td><td><span class="en">scale up: all 86 med/hard + opus as a 3rd model</span><span class="zh">规模化:全部 86 道 med/hard + opus 第三模型</span></td><td><span class="en">transfer matrix + per-tier curves (the "shape" of Poetiq's table)</span><span class="zh">transfer 矩阵 + per-tier 曲线(对照 Poetiq 表的"形状")</span></td></tr>
-  <tr><td class="num">3</td><td><span class="en">wire external keys (Gemini/GPT) + LCB-Pro slice</span><span class="zh">接外部 key(Gemini/GPT)+ LCB-Pro 切片</span></td><td><span class="en">$300–700 credible partial repro (interfaces already in place)</span><span class="zh">$300–700 档 credible partial repro(接口已留好)</span></td></tr>
-  <tr><td class="num">4</td><td><span class="en">method-paper head-to-head: Meta-Harness / Life-Harness on the same suite</span><span class="zh">Method paper 头对头:Meta-Harness / Life-Harness 同套件对比</span></td><td><span class="en">core evidence for the paper's experiments section</span><span class="zh">论文实验节核心证据</span></td></tr>
+  <tr><th></th><th><span class="en">Action</span><span class="zh">动作</span></th><th><span class="en">Status / output</span><span class="zh">状态 / 产出</span></th></tr>
+  <tr><td class="num">1</td><td><span class="en">finish the LCB v6 run</span><span class="zh">LCB v6 运行</span></td><td class="pass num"><span class="en">✅ DONE — haiku +12.5pp, sonnet +16.7pp, ratio 1.33, leapfrog 100%, ablation built in</span><span class="zh">✅ 完成 —— haiku +12.5pp、sonnet +16.7pp、ratio 1.33、leapfrog 100%、消融内置</span></td></tr>
+  <tr><td class="num">2</td><td><span class="en">scale up: all 86 med/hard + opus as a 3rd model</span><span class="zh">规模化:全部 86 道 med/hard + opus 第三模型</span></td><td class="warn num"><span class="en">◌ pending — transfer matrix + per-tier curves</span><span class="zh">◌ 待做 —— transfer 矩阵 + per-tier 曲线</span></td></tr>
+  <tr><td class="num">3</td><td><span class="en">wire external keys (Gemini/GPT) + LCB-Pro slice</span><span class="zh">接外部 key(Gemini/GPT)+ LCB-Pro 切片</span></td><td class="warn num"><span class="en">◌ pending — $300–700 credible partial repro (interfaces ready)</span><span class="zh">◌ 待做 —— $300–700 档 credible partial repro(接口已留好)</span></td></tr>
+  <tr><td class="num">4</td><td><span class="en">method-paper head-to-head: Meta-Harness / Life-Harness</span><span class="zh">Method paper 头对头:Meta-Harness / Life-Harness</span></td><td class="warn num"><span class="en">◌ pending — core evidence for the experiments section</span><span class="zh">◌ 待做 —— 论文实验节核心证据</span></td></tr>
 </table>
 
 <footer>
   metaharness · <span class="en">reproduced from</span><span class="zh">复现自</span> poetiq.ai/posts/recursive_self_improvement_coding + github.com/poetiq-ai/poetiq-arc-agi-solver (<span class="en">mechanism reverse-engineered</span><span class="zh">机制逆向</span>) ·
-  <span class="en">not affiliated with Poetiq</span><span class="zh">与 Poetiq 无关联</span> · <span class="en">report generated</span><span class="zh">报告生成于</span> 2026-06-09 · Claude Code
+  <span class="en">not affiliated with Poetiq</span><span class="zh">与 Poetiq 无关联</span> · <span class="en">updated</span><span class="zh">更新于</span> 2026-06-10 · Claude Code
 </footer>
 
 </div>
